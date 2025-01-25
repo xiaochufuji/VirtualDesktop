@@ -1,14 +1,16 @@
 #pragma once
-
+#include <windows.h> 
 #include <objbase.h>
+#include <stdint.h>
+#include <winstring.h>
 #include <ObjectArray.h>
 //#include <shobjidl_core.h>
 //#include <shobjidl.h>
-#include <stdint.h>
-#include <Windows.Foundation.h>
-using namespace ABI::Windows::Foundation;
+//#include <Windows.Foundation.h>
+//#include <iostream>
+//using namespace ABI::Windows::Foundation;
 
-namespace VirtualDesktops
+namespace VirtualDesktopNS
 {
 	namespace API
 	{
@@ -46,6 +48,18 @@ namespace VirtualDesktops
 			AVCP_HIGH_SCALE_FACTOR = 4
 		};
 
+		enum AdjacentDesktop
+		{
+			LeftDirection = 3,
+			RightDirection = 4
+		};
+		//MIDL_INTERFACE("92CA9DCD-5622-4BBA-A805-5E9F541BD8C9")
+		//	IObjectArray : public IUnknown
+		//{
+		//public:
+		//	virtual HRESULT STDMETHODCALLTYPE GetCount(UINT * count) = 0;
+		//	virtual HRESULT STDMETHODCALLTYPE GetAt(UINT index, GUID* iid, void** obj) = 0;
+		//};
 		// Define the GUID for IApplicationView interface
 		MIDL_INTERFACE("372E1D3B-38D3-42E4-A15B-8AB2B178F513")
 			IApplicationView : public IUnknown
@@ -142,21 +156,32 @@ namespace VirtualDesktops
 		};
 
 		MIDL_INTERFACE("53F5CA0B-158F-4124-900C-057158060B27")
-			IVirtualDesktopManagerInternal
+			IVirtualDesktopManagerInternal : public IUnknown
 		{
 		public:
-			virtual HRESULT STDMETHODCALLTYPE GetCount() = 0;
-			virtual HRESULT STDMETHODCALLTYPE MoveViewToDesktop(IApplicationView* view, IVirtualDesktop* desktop) = 0;
-			virtual HRESULT STDMETHODCALLTYPE CanViewMoveDesktops(IApplicationView* view) = 0;
+			//virtual HRESULT STDMETHODCALLTYPE GetCount(UINT* pCount) = 0;
+			//virtual HRESULT STDMETHODCALLTYPE MoveViewToDesktop(IApplicationView* view, IVirtualDesktop* desktop) = 0;
+			//virtual HRESULT STDMETHODCALLTYPE CanViewMoveDesktops(IApplicationView* view) = 0;
+			//virtual HRESULT STDMETHODCALLTYPE GetCurrentDesktop(IVirtualDesktop** desktop) = 0;
+			//virtual HRESULT STDMETHODCALLTYPE GetDesktops(IObjectArray** desktops) = 0;
+			//virtual HRESULT STDMETHODCALLTYPE GetAdjacentDesktop(IVirtualDesktop* from, int direction, IVirtualDesktop** desktop) = 0;
+			//virtual HRESULT STDMETHODCALLTYPE SwitchDesktop(IVirtualDesktop* desktop) = 0;
+			//virtual HRESULT STDMETHODCALLTYPE SwitchDesktopAndMoveForegroundView(IVirtualDesktop* desktop) = 0;
+			//virtual HRESULT STDMETHODCALLTYPE CreateDesktop(IVirtualDesktop** desktop) = 0;
+			//virtual HRESULT STDMETHODCALLTYPE MoveDesktop(IVirtualDesktop* desktop, int nIndex) = 0;
+			//virtual HRESULT STDMETHODCALLTYPE RemoveDesktop(IVirtualDesktop* desktop, IVirtualDesktop* fallback) = 0;
+			//virtual HRESULT STDMETHODCALLTYPE FindDesktop(const GUID& desktopid, IVirtualDesktop** desktop) = 0;
+			virtual HRESULT STDMETHODCALLTYPE GetCount(UINT * pCount) = 0;
+			virtual HRESULT STDMETHODCALLTYPE MoveViewToDesktop(IApplicationView* pView,IVirtualDesktop* pDesktop) = 0;
+			virtual HRESULT STDMETHODCALLTYPE CanViewMoveDesktops(IApplicationView* pView,int* pfCanViewMoveDesktops) = 0;
 			virtual HRESULT STDMETHODCALLTYPE GetCurrentDesktop(IVirtualDesktop** desktop) = 0;
-			virtual HRESULT STDMETHODCALLTYPE GetDesktops(IObjectArray** desktops) = 0;
-			virtual HRESULT STDMETHODCALLTYPE GetAdjacentDesktop(IVirtualDesktop* from, int direction, IVirtualDesktop** desktop) = 0;
-			virtual HRESULT STDMETHODCALLTYPE SwitchDesktop(IVirtualDesktop* desktop) = 0;
-			virtual HRESULT STDMETHODCALLTYPE SwitchDesktopAndMoveForegroundView(IVirtualDesktop* desktop) = 0;
-			virtual HRESULT STDMETHODCALLTYPE CreateDesktop(IVirtualDesktop** desktop) = 0;
-			virtual HRESULT STDMETHODCALLTYPE MoveDesktop(IVirtualDesktop* desktop, int nIndex) = 0;
-			virtual HRESULT STDMETHODCALLTYPE RemoveDesktop(IVirtualDesktop* desktop, IVirtualDesktop* fallback) = 0;
-			virtual HRESULT STDMETHODCALLTYPE FindDesktop(const GUID& desktopid, IVirtualDesktop** desktop) = 0;
+			virtual HRESULT STDMETHODCALLTYPE GetDesktops(IObjectArray** ppDesktops) = 0;
+			virtual HRESULT STDMETHODCALLTYPE GetAdjacentDesktop(IVirtualDesktop* pDesktopReference,AdjacentDesktop uDirection,IVirtualDesktop** ppAdjacentDesktop) = 0;
+			virtual HRESULT STDMETHODCALLTYPE SwitchDesktop(IVirtualDesktop* pDesktop) = 0;
+			virtual HRESULT STDMETHODCALLTYPE CreateDesktopW(IVirtualDesktop** ppNewDesktop) = 0;
+			virtual HRESULT STDMETHODCALLTYPE RemoveDesktop(IVirtualDesktop* pRemove,IVirtualDesktop* pFallbackDesktop) = 0;
+			virtual HRESULT STDMETHODCALLTYPE FindDesktop(GUID* desktopId,IVirtualDesktop** ppDesktop) = 0;
+
 			virtual HRESULT STDMETHODCALLTYPE GetDesktopSwitchIncludeExcludeViews(IVirtualDesktop* desktop, IObjectArray** unknown1, IObjectArray** unknown2) = 0;
 			virtual HRESULT STDMETHODCALLTYPE SetDesktopName(IVirtualDesktop* desktop, LPCWSTR name) = 0;
 			virtual HRESULT STDMETHODCALLTYPE SetDesktopWallpaper(IVirtualDesktop* desktop, LPCWSTR path) = 0;
@@ -191,13 +216,7 @@ namespace VirtualDesktops
 			virtual HRESULT STDMETHODCALLTYPE UnpinView(IApplicationView* applicationView) = 0;
 		};
 
-		MIDL_INTERFACE("92CA9DCD-5622-4BBA-A805-5E9F541BD8C9")
-			IObjectArray : public IUnknown
-		{
-		public:
-			virtual HRESULT STDMETHODCALLTYPE GetCount(UINT * count) = 0;
-			virtual HRESULT STDMETHODCALLTYPE GetAt(UINT index, GUID* iid, void** obj) = 0;
-		};
+
 
 		MIDL_INTERFACE("6D5140C1-7436-11CE-8034-00AA006009FA")
 			IServiceProvider10 : public IUnknown

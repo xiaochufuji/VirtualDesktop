@@ -1,48 +1,23 @@
-#include "VirtualDesktopAPIs.h"
+#include "VirtualDesktopWrapper.h"
 #include <iostream>
-using namespace VirtualDesktops::API;
+using namespace VirtualDesktopNS::API;
+
+
 
 int main()
 {
-	IVirtualDesktopManagerInternal* VirtualDesktopManagerInternal = nullptr;
-	IVirtualDesktopManager* VirtualDesktopManager = nullptr;
-	IApplicationViewCollection* ApplicationViewCollection = nullptr;
-	IVirtualDesktopPinnedApps* VirtualDesktopPinnedApps = nullptr;
-	CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED); // Initialize COM library
-
-	IServiceProvider10* shell = nullptr;
-	HRESULT hr = CoCreateInstance(CLSID_ImmersiveShell, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&shell));
-	if (FAILED(hr)) {
-		std::cerr << "Failed to create ImmersiveShell instance." << std::endl;
-		return;
+	Implement imp;
+	imp._getCount();
+	imp._getCurrentDesktop();
+	imp._enumerateDesktop();
+	PRINT << imp.m_count << std::endl;
+	PRINT << PrintGUID(imp.m_currentDesktopGUID) << std::endl;
+	PRINT << std::endl;
+	for (auto ite : imp.m_desktopGUIDVec)
+	{
+		auto str = PrintGUID(ite);
+		PRINT << str << std::endl;
 	}
-
-	hr = shell->QueryService(CLSID_VirtualDesktopManagerInternal, IID_PPV_ARGS(&VirtualDesktopManagerInternal));
-	if (FAILED(hr)) {
-		std::cerr << "Failed to query VirtualDesktopManagerInternal." << std::endl;
-		return;
-	}
-
-	hr = CoCreateInstance(CLSID_VirtualDesktopManager, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&VirtualDesktopManager));
-	if (FAILED(hr)) {
-		std::cerr << "Failed to create VirtualDesktopManager instance." << std::endl;
-		return;
-	}
-
-	hr = shell->QueryService(__uuidof(IApplicationViewCollection), IID_PPV_ARGS(&ApplicationViewCollection));
-	if (FAILED(hr)) {
-		std::cerr << "Failed to query ApplicationViewCollection." << std::endl;
-		return;
-	}
-
-	hr = shell->QueryService(CLSID_VirtualDesktopPinnedApps, IID_PPV_ARGS(&VirtualDesktopPinnedApps));
-	if (FAILED(hr)) {
-		std::cerr << "Failed to query VirtualDesktopPinnedApps." << std::endl;
-		return;
-	}
-
-	// Release the shell as it's no longer needed
-	shell->Release();
-
+	system("pause");
 	return 0;
 }
