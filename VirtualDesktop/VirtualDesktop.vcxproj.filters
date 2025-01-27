@@ -21,12 +21,18 @@
     <ClCompile Include="VirtualDesktopAPIs.h">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="VirtualDesktopWrapper.cpp">
+    <ClCompile Include="VirtualDesktop.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TestUnit.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="VirtualDesktopWrapper.h">
+    <ClInclude Include="VirtualDesktop.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TestUnit.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

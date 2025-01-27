@@ -4,12 +4,15 @@
 #include <stdint.h>
 #include <winstring.h>
 #include <ObjectArray.h>
+#include <string>
 //#include <shobjidl_core.h>
 //#include <shobjidl.h>
 //#include <Windows.Foundation.h>
 //#include <iostream>
 //using namespace ABI::Windows::Foundation;
-
+#include <windows.h>
+#include <windows.ui.viewmanagement.h>
+#include <wrl/client.h>
 namespace VirtualDesktopNS
 {
 	namespace API
@@ -72,17 +75,17 @@ namespace VirtualDesktopNS
 			virtual HRESULT STDMETHODCALLTYPE GetThumbnailWindow(HWND* hwnd) = 0;
 			//virtual HRESULT STDMETHODCALLTYPE GetMonitor(IImmersiveMonitor** immersiveMonitor) = 0;
 			virtual HRESULT STDMETHODCALLTYPE GetMonitor(void** immersiveMonitor) = 0;
-			virtual HRESULT STDMETHODCALLTYPE GetVisibility(int* visibility) = 0;
+			virtual HRESULT STDMETHODCALLTYPE GetVisibility(bool* visibility) = 0;
 			virtual HRESULT STDMETHODCALLTYPE SetCloak(APPLICATION_VIEW_CLOAK_TYPE cloakType, int unknown) = 0;
 			//virtual HRESULT STDMETHODCALLTYPE GetPosition(GUID* guid, IApplicationViewPosition** position) = 0;
 			virtual HRESULT STDMETHODCALLTYPE GetPosition(GUID* guid, void** position) = 0;
 			//virtual HRESULT STDMETHODCALLTYPE SetPosition(IApplicationViewPosition* position) = 0;
 			virtual HRESULT STDMETHODCALLTYPE SetPosition(void* position) = 0;
 			virtual HRESULT STDMETHODCALLTYPE InsertAfterWindow(HWND hwnd) = 0;
-			virtual HRESULT STDMETHODCALLTYPE GetExtendedFramePosition(RECT* rect) = 0;
+			virtual HRESULT STDMETHODCALLTYPE GetExtendedFramePosition(Rect* rect) = 0;
 			virtual HRESULT STDMETHODCALLTYPE GetAppUserModelId(LPWSTR* id) = 0;
-			virtual HRESULT STDMETHODCALLTYPE SetAppUserModelId(LPCWSTR id) = 0;
-			virtual HRESULT STDMETHODCALLTYPE IsEqualByAppUserModelId(LPCWSTR id, int* result) = 0;
+			virtual HRESULT STDMETHODCALLTYPE SetAppUserModelId(HSTRING id) = 0;
+			virtual HRESULT STDMETHODCALLTYPE IsEqualByAppUserModelId(HSTRING id, int* result) = 0;
 			virtual HRESULT STDMETHODCALLTYPE GetViewState(uint32_t* state) = 0;
 			virtual HRESULT STDMETHODCALLTYPE SetViewState(uint32_t state) = 0;
 			virtual HRESULT STDMETHODCALLTYPE GetNeediness(int* neediness) = 0;
@@ -133,10 +136,10 @@ namespace VirtualDesktopNS
 		public:
 			virtual HRESULT STDMETHODCALLTYPE GetViews(IObjectArray * *array) = 0;
 			virtual HRESULT STDMETHODCALLTYPE GetViewsByZOrder(IObjectArray** array) = 0;
-			virtual HRESULT STDMETHODCALLTYPE GetViewsByAppUserModelId(LPCWSTR id, IObjectArray** array) = 0;
+			virtual HRESULT STDMETHODCALLTYPE GetViewsByAppUserModelId(HSTRING id, IObjectArray** array) = 0;
 			virtual HRESULT STDMETHODCALLTYPE GetViewForHwnd(HWND hwnd, IApplicationView** view) = 0;
 			virtual HRESULT STDMETHODCALLTYPE GetViewForApplication(void* application, IApplicationView** view) = 0;
-			virtual HRESULT STDMETHODCALLTYPE GetViewForAppUserModelId(LPCWSTR id, IApplicationView** view) = 0;
+			virtual HRESULT STDMETHODCALLTYPE GetViewForAppUserModelId(HSTRING id, IApplicationView** view) = 0;
 			virtual HRESULT STDMETHODCALLTYPE GetViewInFocus(void* view) = 0;
 			virtual HRESULT STDMETHODCALLTYPE Unknown1(void* view) = 0;
 			virtual void STDMETHODCALLTYPE RefreshCollection() = 0;
@@ -150,7 +153,7 @@ namespace VirtualDesktopNS
 		public:
 			virtual HRESULT STDMETHODCALLTYPE IsViewVisible(IApplicationView * view, BOOL * result) = 0;
 			virtual HRESULT STDMETHODCALLTYPE GetId(GUID* id) = 0;
-			virtual HRESULT STDMETHODCALLTYPE GetName(HSTRING* name) = 0;
+			virtual HRESULT STDMETHODCALLTYPE GetName(HSTRING* string) = 0;
 			virtual HRESULT STDMETHODCALLTYPE GetWallpaperPath(HSTRING* wallpaperPath) = 0;
 			virtual HRESULT STDMETHODCALLTYPE IsRemote(BOOL* result) = 0;
 		};
@@ -178,16 +181,17 @@ namespace VirtualDesktopNS
 			virtual HRESULT STDMETHODCALLTYPE GetDesktops(IObjectArray** ppDesktops) = 0;
 			virtual HRESULT STDMETHODCALLTYPE GetAdjacentDesktop(IVirtualDesktop* pDesktopReference,AdjacentDesktop uDirection,IVirtualDesktop** ppAdjacentDesktop) = 0;
 			virtual HRESULT STDMETHODCALLTYPE SwitchDesktop(IVirtualDesktop* pDesktop) = 0;
-			virtual HRESULT STDMETHODCALLTYPE CreateDesktopW(IVirtualDesktop** ppNewDesktop) = 0;
+			virtual HRESULT STDMETHODCALLTYPE CreateDesktop(IVirtualDesktop** ppNewDesktop) = 0;
+			virtual HRESULT STDMETHODCALLTYPE MoveDesktop(IVirtualDesktop* desktop, int nIndex) = 0;
 			virtual HRESULT STDMETHODCALLTYPE RemoveDesktop(IVirtualDesktop* pRemove,IVirtualDesktop* pFallbackDesktop) = 0;
-			virtual HRESULT STDMETHODCALLTYPE FindDesktop(GUID* desktopId,IVirtualDesktop** ppDesktop) = 0;
+			virtual HRESULT STDMETHODCALLTYPE FindDesktop( GUID desktopId,IVirtualDesktop** ppDesktop) = 0;
 
 			virtual HRESULT STDMETHODCALLTYPE GetDesktopSwitchIncludeExcludeViews(IVirtualDesktop* desktop, IObjectArray** unknown1, IObjectArray** unknown2) = 0;
-			virtual HRESULT STDMETHODCALLTYPE SetDesktopName(IVirtualDesktop* desktop, LPCWSTR name) = 0;
-			virtual HRESULT STDMETHODCALLTYPE SetDesktopWallpaper(IVirtualDesktop* desktop, LPCWSTR path) = 0;
-			virtual HRESULT STDMETHODCALLTYPE UpdateWallpaperPathForAllDesktops(LPCWSTR path) = 0;
+			virtual HRESULT STDMETHODCALLTYPE SetDesktopName(IVirtualDesktop* desktop, HSTRING name) = 0;
+			virtual HRESULT STDMETHODCALLTYPE SetDesktopWallpaper(IVirtualDesktop* desktop, HSTRING path) = 0;
+			virtual HRESULT STDMETHODCALLTYPE UpdateWallpaperPathForAllDesktops(HSTRING path) = 0;
 			virtual HRESULT STDMETHODCALLTYPE CopyDesktopState(IApplicationView* pView0, IApplicationView* pView1) = 0;
-			virtual HRESULT STDMETHODCALLTYPE CreateRemoteDesktop(LPCWSTR path, IVirtualDesktop** desktop) = 0;
+			virtual HRESULT STDMETHODCALLTYPE CreateRemoteDesktop(HSTRING path, IVirtualDesktop** desktop) = 0;
 			//virtual HRESULT STDMETHODCALLTYPE SwitchRemoteDesktop(IVirtualDesktop* desktop, IntPtr switchtype) = 0;
 			virtual HRESULT STDMETHODCALLTYPE SwitchRemoteDesktop(IVirtualDesktop* desktop, void* switchtype) = 0;
 			virtual HRESULT STDMETHODCALLTYPE SwitchDesktopWithAnimation(IVirtualDesktop* desktop) = 0;
@@ -208,9 +212,9 @@ namespace VirtualDesktopNS
 			IVirtualDesktopPinnedApps : public IUnknown
 		{
 		public:
-			virtual HRESULT STDMETHODCALLTYPE IsAppIdPinned(LPCWSTR appId, BOOL * result) = 0;
-			virtual HRESULT STDMETHODCALLTYPE PinAppID(LPCWSTR appId) = 0;
-			virtual HRESULT STDMETHODCALLTYPE UnpinAppID(LPCWSTR appId) = 0;
+			virtual HRESULT STDMETHODCALLTYPE IsAppIdPinned(HSTRING appId, BOOL * result) = 0;
+			virtual HRESULT STDMETHODCALLTYPE PinAppID(HSTRING appId) = 0;
+			virtual HRESULT STDMETHODCALLTYPE UnpinAppID(HSTRING appId) = 0;
 			virtual HRESULT STDMETHODCALLTYPE IsViewPinned(IApplicationView* applicationView, BOOL* result) = 0;
 			virtual HRESULT STDMETHODCALLTYPE PinView(IApplicationView* applicationView) = 0;
 			virtual HRESULT STDMETHODCALLTYPE UnpinView(IApplicationView* applicationView) = 0;
