@@ -10,7 +10,6 @@
 //#include <Windows.Foundation.h>
 //#include <iostream>
 //using namespace ABI::Windows::Foundation;
-#include <windows.h>
 #include <windows.ui.viewmanagement.h>
 #include <wrl/client.h>
 namespace VirtualDesktopNS
@@ -84,7 +83,7 @@ namespace VirtualDesktopNS
 			virtual HRESULT STDMETHODCALLTYPE InsertAfterWindow(HWND hwnd) = 0;
 			virtual HRESULT STDMETHODCALLTYPE GetExtendedFramePosition(Rect* rect) = 0;
 			virtual HRESULT STDMETHODCALLTYPE GetAppUserModelId(LPWSTR* id) = 0;
-			virtual HRESULT STDMETHODCALLTYPE SetAppUserModelId(HSTRING id) = 0;
+			virtual HRESULT STDMETHODCALLTYPE SetAppUserModelId(LPWSTR* id) = 0;
 			virtual HRESULT STDMETHODCALLTYPE IsEqualByAppUserModelId(HSTRING id, int* result) = 0;
 			virtual HRESULT STDMETHODCALLTYPE GetViewState(uint32_t* state) = 0;
 			virtual HRESULT STDMETHODCALLTYPE SetViewState(uint32_t state) = 0;
@@ -112,7 +111,7 @@ namespace VirtualDesktopNS
 			virtual HRESULT STDMETHODCALLTYPE Flash() = 0;
 			virtual HRESULT STDMETHODCALLTYPE GetRootSwitchableOwner(IApplicationView** rootSwitchableOwner) = 0;
 			virtual HRESULT STDMETHODCALLTYPE EnumerateOwnershipTree(IObjectArray** ownershipTree) = 0;
-			virtual HRESULT STDMETHODCALLTYPE GetEnterpriseId(LPWSTR* enterpriseId) = 0;
+			virtual HRESULT STDMETHODCALLTYPE GetEnterpriseId(HSTRING* enterpriseId) = 0;
 			virtual HRESULT STDMETHODCALLTYPE IsMirrored(BOOL* isMirrored) = 0;
 
 			// Unknown methods (based on the original interface, could be placeholders)
@@ -184,7 +183,7 @@ namespace VirtualDesktopNS
 			virtual HRESULT STDMETHODCALLTYPE CreateDesktop(IVirtualDesktop** ppNewDesktop) = 0;
 			virtual HRESULT STDMETHODCALLTYPE MoveDesktop(IVirtualDesktop* desktop, int nIndex) = 0;
 			virtual HRESULT STDMETHODCALLTYPE RemoveDesktop(IVirtualDesktop* pRemove,IVirtualDesktop* pFallbackDesktop) = 0;
-			virtual HRESULT STDMETHODCALLTYPE FindDesktop( GUID desktopId,IVirtualDesktop** ppDesktop) = 0;
+			virtual HRESULT STDMETHODCALLTYPE FindDesktop(GUID desktopId,IVirtualDesktop** ppDesktop) = 0;
 
 			virtual HRESULT STDMETHODCALLTYPE GetDesktopSwitchIncludeExcludeViews(IVirtualDesktop* desktop, IObjectArray** unknown1, IObjectArray** unknown2) = 0;
 			virtual HRESULT STDMETHODCALLTYPE SetDesktopName(IVirtualDesktop* desktop, HSTRING name) = 0;
