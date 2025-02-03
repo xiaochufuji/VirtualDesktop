@@ -27,7 +27,7 @@ namespace xiaochufuji
 		if (FAILED(result))
 			return _string{};
 
-#ifdef UNICODE
+#if defined(UNICODE) || defined(_UNICODE) 
 		return _string(guidString);
 #else
 		std::wstring wstr(guidString);
@@ -42,7 +42,7 @@ namespace xiaochufuji
 	{
 		GUID guid;
 		std::wstring _str;
-#ifdef UNICODE
+#if defined(UNICODE) || defined(_UNICODE) 
 		_str = str;
 #else
 		if (std::is_same<_string, std::string>::value)
@@ -91,7 +91,7 @@ namespace xiaochufuji
 
 	_string HStringToAutoString(const HSTRING& hstr)
 	{
-#ifdef UNICODE
+#if defined(UNICODE) || defined(_UNICODE) 
 		return HStringToWString(hstr);
 #else
 		return HStringToString(hstr);
@@ -109,7 +109,7 @@ namespace xiaochufuji
 
 	HSTRING AutoStringToHString(const _string& str) {
 		HSTRING retVal{ nullptr };
-#ifdef UNICODE
+#if defined(UNICODE) || defined(_UNICODE) 
 		WindowsCreateString(str.c_str(), str.size() + 1, &retVal);
 #else
 		std::wstring _str = StringToWString(str);
@@ -136,7 +136,7 @@ namespace xiaochufuji
 
 	std::wostream& operator<<(std::wostream& os, const InformationStructure& info)
 	{
-#ifdef UNICODE
+#if defined(UNICODE) || defined(_UNICODE) 
 		std::wstring _guid = L"guid: ";
 		std::wstring _name = L"\tname: ";
 		std::wstring _wallpaper = L"\twallpaper: ";

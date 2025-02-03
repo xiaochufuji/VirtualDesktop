@@ -12,7 +12,7 @@ namespace xiaochufujiTest {
 	{
 		if (!test) return;
 #pragma region condition
-#ifdef UNICODE
+#if defined(UNICODE) || defined(_UNICODE) 
 		_string _count = L"desktop conut: ";
 		_string _currentDesktopGUID = L"current desktop guid: ";
 		_string _guid = L"\tguid: ";
@@ -67,7 +67,7 @@ namespace xiaochufujiTest {
 	{
 		if (!test) return;
 #pragma region condition
-#ifdef UNICODE 
+#if defined(UNICODE) || defined(_UNICODE) 
 		_string str = L"test set name";
 #else
 		_string str = "test set name";
@@ -83,7 +83,7 @@ namespace xiaochufujiTest {
 	{
 		if (!test) return;
 #pragma region condition
-#ifdef UNICODE 
+#if defined(UNICODE) || defined(_UNICODE) 
 		_string path = LR"(D:\ASUS\Desktop\carousel1.jpg)";
 #else
 		_string path = R"(D:\ASUS\Desktop\carousel1.jpg)";
@@ -99,7 +99,7 @@ namespace xiaochufujiTest {
 	{
 		if (!test) return;
 #pragma region condition
-#ifdef UNICODE 
+#if defined(UNICODE) || defined(_UNICODE) 
 		_string path = LR"(D:\ASUS\Desktop\carousel3.jpg)";
 #else
 		_string path = R"(D:\ASUS\Desktop\carousel3.jpg)";
@@ -264,7 +264,7 @@ namespace xiaochufujiTest {
 	{
 		if (!test) return;
 #pragma region condition
-#ifdef UNICODE 
+#if defined(UNICODE) || defined(_UNICODE) 
 		_string str = L"Desktop 3";
 #else
 		_string str = "Desktop 3";
@@ -281,7 +281,7 @@ namespace xiaochufujiTest {
 	{
 		if (!test) return;
 #pragma region condition
-#ifdef UNICODE 
+#if defined(UNICODE) || defined(_UNICODE) 
 		_string str = L"test";
 #else
 		_string str = "test";

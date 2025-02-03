@@ -8,7 +8,7 @@ namespace xiaochufuji
 
 #pragma region defination
 
-#ifdef UNICODE
+#if defined(UNICODE) || defined(_UNICODE) 
 	using _string = std::wstring;
 	using _stringstream = std::wstringstream;
 #define PRINT  std::wcout
